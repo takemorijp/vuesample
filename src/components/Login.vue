@@ -72,8 +72,9 @@ const emit = defineEmits<{
 	(e: 'signup'): void
 }>()
 
-const email = ref('')
-const password = ref('')
+// 開発用の初期値
+const email = ref('dev@example.com')
+const password = ref('password123')
 const showPassword = ref(false)
 const remember = ref(false)
 const isLoading = ref(false)
