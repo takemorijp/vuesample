@@ -18,9 +18,10 @@
             <Search class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input v-model="query" type="text" placeholder="ドキュメントを検索..." class="w-full pl-11 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
-          <button class="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2">
+          <button @click="filterDialogOpen = true" class="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2">
             <Filter class="w-5 h-5" />
             フィルター
+            <span v-if="activeFiltersCount > 0" class="ml-1 px-2 py-0.5 bg-blue-500 text-white text-xs rounded-full">{{ activeFiltersCount }}</span>
           </button>
         </div>
       </div>
@@ -75,6 +76,13 @@
           <button @click="confirmDeleteOk" class="px-3 py-1 bg-red-600 text-white rounded">削除</button>
         </div>
       </ConfirmDialog>
+
+      <DocumentFilterDialog 
+        :isOpen="filterDialogOpen" 
+        :filters="documentFilters" 
+        @close="filterDialogOpen = false"
+        @apply="applyFilters" 
+      />
     </div>
   </main>
 </template>
@@ -83,6 +91,13 @@
 import { ref, computed } from 'vue'
 import { FileText, Search, Plus, Filter, Download, Trash2 } from 'lucide-vue-next'
 import ConfirmDialog from '../ConfirmDialog.vue'
+import DocumentFilterDialog from '../DocumentFilterDialog.vue'
+
+interface DocumentFilters {
+  types: string[]
+  dateRange: string
+  sizeRange: string
+}
 
 // sample data (ported)
 const allDocuments = [
@@ -113,6 +128,20 @@ const currentPage = ref(1)
 const itemsPerPage = 8
 const dialogOpen = ref(false)
 const selectedDoc = ref('')
+const filterDialogOpen = ref(false)
+const documentFilters = ref<DocumentFilters>({
+  types: [],
+  dateRange: 'all',
+  sizeRange: 'all'
+})
+
+const activeFiltersCount = computed(() => {
+  let count = 0
+  if (documentFilters.value.types.length > 0) count++
+  if (documentFilters.value.dateRange !== 'all') count++
+  if (documentFilters.value.sizeRange !== 'all') count++
+  return count
+})
 
 const totalPages = computed(() => Math.ceil(allDocuments.length / itemsPerPage))
 const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage)
@@ -128,6 +157,12 @@ function confirmDeleteOk(){ console.log('削除:', selectedDoc.value); dialogOpe
 
 function showDeleteAlert(name:string){
   alert(`${name} を削除します`)
+}
+
+function applyFilters(filters: DocumentFilters) {
+  documentFilters.value = filters
+  currentPage.value = 1
+  console.log('適用されたフィルター:', filters)
 }
 </script>
 

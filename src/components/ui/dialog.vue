@@ -30,9 +30,3 @@ function close() { emit('update:modelValue', false) }
 .fade-enter-active,.fade-leave-active{transition:opacity .2s}
 .fade-enter-from,.fade-leave-to{opacity:0}
 </style>
-</script>
-
-<style scoped>
-.fade-enter-active,.fade-leave-active{transition:opacity .2s}
-.fade-enter-from,.fade-leave-to{opacity:0}
-</style>
