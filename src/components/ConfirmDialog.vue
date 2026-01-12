@@ -1,14 +1,14 @@
 <template>
   <div v-if="isOpen" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" @click="handleClose">
-    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 transform transition-all" @click.stop>
+    <div role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-message" class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 transform transition-all" @click.stop>
       <div class="flex items-start justify-between p-6 pb-4">
         <div class="flex items-start gap-4">
           <div :class="['w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0', colors.icon]">
             <AlertTriangle class="w-6 h-6" />
           </div>
           <div>
-            <h3 class="text-xl font-semibold text-slate-800 mb-2">{{ title }}</h3>
-            <p class="text-slate-600 text-sm leading-relaxed">{{ message }}</p>
+            <h3 id="confirm-title" class="text-xl font-semibold text-slate-800 mb-2">{{ title }}</h3>
+            <p id="confirm-message" class="text-slate-600 text-sm leading-relaxed">{{ message }}</p>
           </div>
         </div>
         <button @click="handleClose" class="p-1 rounded-lg hover:bg-slate-100 transition-colors flex-shrink-0" aria-label="閉じる">
@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch, onUnmounted } from 'vue'
 import { AlertTriangle, X } from 'lucide-vue-next'
 
 const props = defineProps<{
@@ -51,6 +51,28 @@ const colors = computed(() => {
     case 'info': return { icon: 'bg-blue-100 text-blue-600', button: 'bg-blue-500 hover:bg-blue-600' }
     default: return { icon: 'bg-yellow-100 text-yellow-600', button: 'bg-yellow-500 hover:bg-yellow-600' }
   }
+})
+
+// ボディスクロールロックとEscapeキー対応
+const handleEscape = (e: KeyboardEvent) => {
+  if (e.key === 'Escape') {
+    handleClose()
+  }
+}
+
+watch(() => props.isOpen, (newVal) => {
+  if (newVal) {
+    document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', handleEscape)
+  } else {
+    document.body.style.overflow = ''
+    document.removeEventListener('keydown', handleEscape)
+  }
+})
+
+onUnmounted(() => {
+  document.body.style.overflow = ''
+  document.removeEventListener('keydown', handleEscape)
 })
 
 function handleClose(){ emit('close') }
