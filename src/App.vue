@@ -9,23 +9,28 @@
     </template>
 
     <template v-else>
-      <Sidebar
-        :is-open="sidebarOpen"
-        @toggle="toggleSidebar"
-        @page-change="handlePageChange"
-        :current-page="currentPage"
-        :drawer-open="drawerOpen"
-        @drawer-toggle="drawerOpen = !drawerOpen"
-        @logout="handleLogout"
-      />
-
-      <div :class="['transition-all duration-300', sidebarOpen ? 'lg:ml-64' : 'ml-0']">
-        <Header @menu-click="toggleSidebar" :sidebar-open="sidebarOpen" />
-        <component
-          :is="currentView"
-          @signup-success="handleLogin"
-          @back="showLogin"
+      <div class="flex min-h-screen">
+        <Sidebar
+          v-if="sidebarOpen"
+          :is-open="true"
+          @toggle="toggleSidebar"
+          @page-change="handlePageChange"
+          :current-page="currentPage"
+          :drawer-open="drawerOpen"
+          @drawer-toggle="drawerOpen = !drawerOpen"
+          @logout="handleLogout"
         />
+
+        <div class="flex-1 flex flex-col transition-all duration-300">
+          <Header @menu-click="toggleSidebar" />
+          <div class="flex-1">
+            <component
+              :is="currentView"
+              @signup-success="handleLogin"
+              @back="showLogin"
+            />
+          </div>
+        </div>
       </div>
     </template>
   </div>

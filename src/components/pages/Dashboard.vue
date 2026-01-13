@@ -17,7 +17,8 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- グラフと商品リストを横並びに表示 -->
+      <div class="grid grid-cols-2 gap-6">
         <div class="bg-white rounded-lg border border-slate-200 p-6">
           <div class="flex items-center gap-2 mb-4">
             <BarChart3 class="w-5 h-5 text-blue-500" />
@@ -25,7 +26,7 @@
           </div>
           <div class="h-64 flex items-end justify-between gap-2">
             <div v-for="(h, i) in chartHeights" :key="i" class="flex-1 flex flex-col items-center">
-              <div class="w-full bg-blue-500 rounded-t hover:bg-blue-600 transition-colors" :style="{ height: h + '%' }"></div>
+              <div class="w-full bg-blue-500 rounded-t hover:bg-blue-600 transition-colors cursor-pointer" :style="{ height: h + '%' }"></div>
               <p class="text-xs text-slate-500 mt-2">{{ i+1 }}月</p>
             </div>
           </div>

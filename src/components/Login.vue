@@ -40,7 +40,7 @@
 						<button type="button" class="text-sm text-blue-500 hover:text-blue-600" @click="emit('forgot')">パスワードを忘れた</button>
 					</div>
 
-					<button type="submit" :disabled="isLoading" class="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+					<button type="submit" autofocus :disabled="isLoading" class="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center gap-2">
 						<template v-if="isLoading">
 							<div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
 							<span>ログイン中...</span>
