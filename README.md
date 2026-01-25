@@ -17,6 +17,7 @@
 
 ```bash
 npm install
+npm i
 ```
 
 ## 開発
